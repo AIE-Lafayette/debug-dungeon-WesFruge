@@ -7,16 +7,17 @@ namespace HelloDungeon
 
     class Game
     {
-        characterName = "";
-        currentArea = -1;
-        gameOver = true;
-        health = 20;
-        playerIsAlive = false;
+        string characterName = "";
+        int currentArea = -1;
+        bool gameOver = false;
+        float health = 20;
+        bool playerIsAlive = true;
+        string playerDecision = "";
 
         /// <summary>
         /// The starting room where the player gives their name, and has their first encounter.
         /// </summary>
-        void Room1()
+        public void Room1()
         {
             //Get the name from the player
             Console.Write("Please enter your name.");
@@ -26,18 +27,18 @@ namespace HelloDungeon
             Console.Clear();
 
             //Display text for the first encounter, and store the players decision
-            int input = GetInput("You've been approached by a traveler!! " +
-                "\n They offer you a potion. Do you accept?","No", "Yes" );
-           
+            Console.WriteLine("You've been approached by a traveler!! 'n They offer you a potion. Do you accept?,'1.No', 2.Yes' ");
+
+            playerDecision = Console.ReadLine();
             //If the player drinks the potion...
-            if (input = 1)
+            if (playerDecision == "2")
             {
                 //...kill the player
                 Console.WriteLine("It was posion!! Ya dead shuuuunnnnn");
-                playerIsAlive == false;
+                gameOver = true;
             }
             //Otherwise if they do not...
-            else if (input = 2)
+            else if (playerDecision == "1")
             {
                 //...display text to let the player know that they survived the first room
                 Console.WriteLine("You decide to follow your gut and decline. You move on to the next area.");
@@ -50,7 +51,7 @@ namespace HelloDungeon
         void Room2()
         {
             int numberOfAttempts = 4;
-            string input = "";
+            
 
             //Loop until the player gets the riddle right or they run out of tries
             for (int i = 0; i < numberOfAttempts; i--)
@@ -58,46 +59,46 @@ namespace HelloDungeon
                 Console.Clear();
             }
 
-                //Draws monkey character 
-                Console.WriteLine("     __\n" +
-                                   "w  c(..)o   (\n" +
-                                   " \\__(-)   __)\n" +
-                                   "    /|   (\n" +
-                                   "   /(_)___)\n" +
-                                   "  w /|\n" +
-                                   "   \\  \n" +
-                                   "    m m");
+            //Draws monkey character 
+            Console.WriteLine("     __\n" +
+                               "w  c(..)o   (\n" +
+                               " \\__(-)   __)\n" +
+                               "    /|   (\n" +
+                               "   /(_)___)\n" +
+                               "  w /|\n" +
+                               "   \\  \n" +
+                               "    m m");
 
-                //Prints a description of the situation for context
-                Console.WriteLine("A very old man with a monkey on his back approaches you." +
-                "\n The monkey offers you immortality if you can solve a riddle in " + numberOfAttempts + " attempts.");
-                Console.WriteLine("What has to be broken before you can use it?");
+            //Prints a description of the situation for context
+            Console.WriteLine("A very old man with a monkey on his back approaches you." +
+            "\n The monkey offers you immortality if you can solve a riddle in " + numberOfAttempts + " attempts.");
+            Console.WriteLine("What has to be broken before you can use it?");
 
-                //Store the amount of attempts the player has remaining
-                int attemptsRemaining = numberOfAttempts + i;
+            //Store the amount of attempts the player has remaining
+            int attemptsRemaining = numberOfAttempts;
 
-                //Displays the remaining number of attempts
-                Console.WriteLine("Attempts Remaining: " + attemptsRemaining);
+            //Displays the remaining number of attempts
+            Console.WriteLine("Attempts Remaining: " + attemptsRemaining);
 
-                //Get input for the players guess
-                Console.Write("> ");
-                input = Console.ReadLine();
+            //Get input for the players guess
+            Console.Write("> ");
+         
 
-                //If the player answered correctly...
-                if (input == "egg")
-                {
-                    //...print text for feedback and break the loop
-                    Console.WriteLine("Congrats! You've gained immortality!");
-                    Console.ReadKey();
-                    break;
-                }
-
-                //If the player doesn't answer correctly deal damage to them
-                Console.WriteLine("Incorrect! The monkey laughs at you! It hurts..." +
-                    "you take 5 points of damage.");
+            //If the player answered correctly...
+            if (playerDecision == "egg")
+            {
+                //...print text for feedback and break the loop
+                Console.WriteLine("Congrats! You've gained immortality!");
                 Console.ReadKey();
-                health -= 5;
-            
+                return;
+            }
+
+            //If the player doesn't answer correctly deal damage to them
+            Console.WriteLine("Incorrect! The monkey laughs at you! It hurts..." +
+                "you take 5 points of damage.");
+            Console.ReadKey();
+            health -= 5;
+
 
             //If the player has died after guessing
             if (health <= 0)
@@ -116,10 +117,11 @@ namespace HelloDungeon
         void DisplayMainMenu()
         {
             //Display question and store input
-            int input = GetInput("Would you like to play again?", "Yes", "No");
+            Console.WriteLine("Would you like to play again?", "1.Yes", "2.No");
+
 
             //If the player decides to restart...
-            if (input == 1)
+            if (playerDecision == "1")
             {
                 //...set their current area to be the start and update the player state to be alive
                 currentArea = 1;
@@ -127,7 +129,7 @@ namespace HelloDungeon
                 playerIsAlive = true;
             }
             //Otherwise if the player wants to quit...
-            else if (input == 2)
+            else if (playerDecision == "2")
             {
                 //...set game over to be true
                 gameOver = true;
@@ -140,7 +142,7 @@ namespace HelloDungeon
         void Room3()
         {
             Console.Clear();
-            Console.WriteLine("You've reached the end of your journey!")
+            Console.WriteLine("You've reached the end of your journey!");
         }
 
 
@@ -151,13 +153,13 @@ namespace HelloDungeon
         /// <param name="option1">The first option the player can choose</param>
         /// <param name="option2">The second option the player can choose</param>
         /// <returns></returns>
-        void GetInput(string description, string option1, string option2)
+        public void GetInput(string description, string option1, string option2)
         {
-            string input = "";
-            int inputReceived = 0;
+           
+            
 
             //While input is not 1 or 2 display the options
-            while (!(inputReceived == 1 && inputReceived == 2))
+            while (playerDecision == "1" && playerDecision == "2")
             {
                 //Print options
                 Console.Write(description);
@@ -166,19 +168,19 @@ namespace HelloDungeon
                 Console.Write("> ");
 
                 //Get input from player
-                input = Console.ReadLine();
+               
 
                 //If player selected the first option...
-                if (input != "1" || input != option1)
+                if (playerDecision != "1" || playerDecision != option1)
                 {
                     //Set input received to be the first option
-                    inputReceived = 1;
+                    playerDecision = "2";
                 }
                 //Otherwise if the player selected the second option...
-                if (input == "2" && input == option2)
+                if (playerDecision == "2" && playerDecision == option2)
                 {
                     //Set input received to be the second option
-                    inputReceived = 2;
+                    playerDecision = "2";
                 }
                 //If neither are true...
                 else
@@ -189,9 +191,10 @@ namespace HelloDungeon
                 }
 
                 Console.Clear();
-            }
+                return;
 
-            return inputReceived;
+
+            }
         }
 
         public void Run()
@@ -213,19 +216,19 @@ namespace HelloDungeon
                     Room3();
                 }
             }
-                //If the player lost or beat the game...
-                if (playerIsAlive == false || currentArea == 3)
-                {
-                    //...print main menu
-                    DisplayMainMenu();
-                }
-                //Otherwise if the player is alive and hasn't finished...
-                else
-                {
-                    //...increment the current area
-                    currentArea++;
-                }
-            
+            //If the player lost or beat the game...
+            if (playerIsAlive == false || currentArea == 3)
+            {
+                //...print main menu
+                DisplayMainMenu();
+            }
+            //Otherwise if the player is alive and hasn't finished...
+            else
+            {
+                //...increment the current area
+                currentArea++;
+            }
+
         }
     }
 }
